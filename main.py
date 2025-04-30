@@ -72,27 +72,27 @@ async def give_cards(user, count):
 
 
 def give_points(user, amount):
-    with open('./userdata/scoreboard.json', 'r') as f:
+    with open('./data/scoreboard.json', 'r') as f:
         scoreboard = json.load(f)
 
     scoreboard[str(user.id)] += amount
 
-    with open('./userdata/scoreboard.json', 'w') as f:
+    with open('./data/scoreboard.json', 'w') as f:
         json.dump(scoreboard, f, indent=4)
 
 
 def reset_cooldown(user):
-    with open('./userdata/cooldowns.json', 'r') as f:
+    with open('./data/cooldowns.json', 'r') as f:
         cooldowns = json.load(f)
 
     cooldowns[str(user.id)] = int(time.time())
 
-    with open('./userdata/cooldowns.json', 'w') as f:
+    with open('./data/cooldowns.json', 'w') as f:
         json.dump(cooldowns, f, indent=4)
 
 
 def get_cooldown(user):
-    with open('./userdata/cooldowns.json', 'r') as f:
+    with open('./data/cooldowns.json', 'r') as f:
         cooldowns = json.load(f)
 
     return cooldowns[str(user.id)]
@@ -172,26 +172,26 @@ async def join(ctx):
         await ctx.reply(':rage:')
         return
 
-    with open('./userdata/scoreboard.json', 'r') as f:
+    with open('./data/scoreboard.json', 'r') as f:
         scoreboard = json.load(f)
 
-    with open('./userdata/cooldowns.json', 'r') as f:
+    with open('./data/cooldowns.json', 'r') as f:
         cooldowns = json.load(f)
 
-    with open('./userdata/wins.json', 'r') as f:
+    with open('./data/wins.json', 'r') as f:
         wins = json.load(f)
 
     scoreboard[ctx.author.id] = 0
     cooldowns[ctx.author.id] = 0
     wins[ctx.author.id] = 0 if ctx.author.id not in wins else wins[ctx.author.id]
 
-    with open('./userdata/scoreboard.json', 'w') as f:
+    with open('./data/scoreboard.json', 'w') as f:
         json.dump(scoreboard, f, indent=4)
 
-    with open('./userdata/cooldowns.json', 'w') as f:
+    with open('./data/cooldowns.json', 'w') as f:
         json.dump(cooldowns, f, indent=4)
 
-    with open('./userdata/wins.json', 'w') as f:
+    with open('./data/wins.json', 'w') as f:
         json.dump(wins, f, indent=4)
 
     await give_cards(ctx.author, CARDS)
@@ -248,7 +248,7 @@ async def leaderboard(ctx):
         await ctx.reply('Please use this command in https://discord.com/channels/1025958887209316422/1313998443827691551 to avoid clutter.')
         return
     
-    with open('./userdata/scoreboard.json', 'r') as f:
+    with open('./data/scoreboard.json', 'r') as f:
         scoreboard = json.load(f)
 
     sorted_scores = sorted(scoreboard.items(), key=lambda x: x[1], reverse=True)
@@ -272,7 +272,7 @@ async def wins(ctx):
         await ctx.reply('Please use this command in https://discord.com/channels/1025958887209316422/1313998443827691551 to avoid clutter.')
         return
     
-    with open('./userdata/wins.json', 'r') as f:
+    with open('./data/wins.json', 'r') as f:
         wins = json.load(f)
 
     sorted_scores = sorted(wins.items(), key=lambda x: x[1], reverse=True)
