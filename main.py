@@ -272,4 +272,5 @@ async def help(ctx):
 
 # run bot
 load_dotenv()
-bot.run(os.getenv('TOKEN'))
+TOKEN = os.getenv('TOKEN')
+bot.run(TOKEN)
