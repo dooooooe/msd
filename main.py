@@ -158,18 +158,17 @@ async def on_message_delete(message):
         if message.id == card.message.id:
             played_cards.remove(card)
             await message.author.send('A card you played seems to have been deleted...')
+            return
 
 
 @bot.event
-async def on_message_edit(before, after):
+async def on_message_edit(message, after):
     for card in played_cards[:]:
-        prompt = card.prompt.strip().lower()
-        content = after.content.lower()
-
-        if prompt not in content:
+        if message.id == card.message.id and message.prompt.strip().lower() not in after.content:
             played_cards.remove(card)
-            await after.author.send('A card you played was edited out of existence...')
-
+            await message.author.send('A card you played was edited out of existence...')
+            return
+        
 
 # bot commands
 @bot.command(name='join')
@@ -310,8 +309,11 @@ async def cooldown(ctx):
         await ctx.author.send(f'You may play another card in {precisedelta(cooldown)}')
 
 
-@bot.command(name='cycle', aliases=['swap'])
+@bot.command(name='cycle', aliases=['swap', 'reroll', 'rotate', 'draw'])
 async def cycle(ctx):
+    if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
+        return
+
     cooldown = COOLDOWN - (int(time.time()) - get_cooldown(ctx.author))
 
     if cooldown <= 0:
