@@ -23,7 +23,7 @@ CARDS = 10
 
 shutil.copyfile(f'./decks/{DECK}.txt', './decks/deck.txt')
 
-with open('./scoreboard.json', 'w') as f:
+with open('./data/scoreboard.json', 'w') as f:
     f.write('{}')
 
 # bot functions
@@ -245,7 +245,7 @@ async def cards(ctx):
         cards = f.read()
 
     await ctx.author.send(embed=discord.Embed(title='Your Cards', description=cards))
-    await ctx.reply('Send you your cards')
+    await ctx.reply('Sent you your cards')
 
 
 @bot.command(name='leaderboard', aliases=['lb', 'scoreboard'])
@@ -334,6 +334,7 @@ async def cycle(ctx):
 
     else:
         await ctx.author.send(f'You may cycle more cards in {precisedelta(cooldown)}')
+
 
 @bot.command(name='help', aliases=['rules', 'commands'])
 async def help(ctx):
