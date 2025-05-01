@@ -162,11 +162,11 @@ async def on_message_delete(message):
 
 
 @bot.event
-async def on_message_edit(message, after):
+async def on_message_edit(before, after):
     for card in played_cards[:]:
-        if message.id == card.message.id and message.prompt.strip().lower() not in after.content:
+        if before.id == card.message.id and before.prompt.strip().lower() not in after.content.lower():
             played_cards.remove(card)
-            await message.author.send('A card you played was edited out of existence...')
+            await before.author.send('A card you played was edited out of existence...')
             return
         
 
