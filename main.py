@@ -312,21 +312,28 @@ async def cooldown(ctx):
 
 @bot.command(name='cycle', aliases=['swap'])
 async def cycle(ctx):
-    if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
-        return
+    cooldown = COOLDOWN - (int(time.time()) - get_cooldown(ctx.author))
 
-    with open(user_file(ctx.author.id), 'r') as f:
-        cards = f.readlines()
+    if cooldown <= 0:
+        reset_cooldown(ctx.author)
+        if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
+            return
 
-    to_remove = random.sample(cards, CARDS // 2)
-    for card in to_remove:
-        cards.remove(card)
+        with open(user_file(ctx.author.id), 'r') as f:
+            cards = f.readlines()
 
-    with open(user_file(ctx.author.id), 'w') as f:
-        f.writelines(cards)
+        to_remove = random.sample(cards, CARDS // 2)
+        for card in to_remove:
+            cards.remove(card)
 
-    await give_cards(ctx.author, CARDS // 2)
+        with open(user_file(ctx.author.id), 'w') as f:
+            f.writelines(cards)
 
+        await give_cards(ctx.author, CARDS // 2)
+        await ctx.author.send(f'Because you cycled cards, you have been placed on cooldown for {precisedelta(COOLDOWN)}')
+
+    else:
+        await ctx.author.send(f'You may cycle more cards in {precisedelta(cooldown)}')
 
 @bot.command(name='help', aliases=['rules', 'commands'])
 async def help(ctx):
