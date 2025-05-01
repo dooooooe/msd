@@ -118,7 +118,7 @@ async def on_message(message):
                     card.tick()
 
                 if card.countdown == 0:
-                    await card.message.reply(f'{card.message.author.name} has slipped in \'{card.prompt.strip()}!\'')
+                    await card.message.reply(f'{card.message.author.name} has slipped in \'{card.prompt.strip()}\'!')
                     give_points(card.message.author, 5)
                     played_cards.remove(card)
 
@@ -161,11 +161,14 @@ async def on_message_delete(message):
 
 
 @bot.event
-async def on_message_edit(message, after):
-    for card in played_cards:
-        if message.id == card.message.id and card.prompt.strip().lower() not in after.content.lower():
+async def on_message_edit(before, after):
+    for card in played_cards[:]:
+        prompt = card.prompt.strip().lower()
+        content = after.content.lower()
+
+        if prompt not in content:
             played_cards.remove(card)
-            await message.author.send('A card you played was edited out of existence...')
+            await after.author.send('A card you played was edited out of existence...')
 
 
 # bot commands
@@ -307,6 +310,24 @@ async def cooldown(ctx):
         await ctx.author.send(f'You may play another card in {precisedelta(cooldown)}')
 
 
+@bot.command(name='cycle', aliases=['swap'])
+async def cycle(ctx):
+    if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
+        return
+
+    with open(user_file(ctx.author.id), 'r') as f:
+        cards = f.readlines()
+
+    to_remove = random.sample(cards, CARDS // 2)
+    for card in to_remove:
+        cards.remove(card)
+
+    with open(user_file(ctx.author.id), 'w') as f:
+        f.writelines(cards)
+
+    await give_cards(ctx.author, CARDS // 2)
+
+
 @bot.command(name='help', aliases=['rules', 'commands'])
 async def help(ctx):
     if ctx.channel.id == 1337502693903831061:
@@ -314,7 +335,7 @@ async def help(ctx):
         return
     
     await ctx.reply(embed=discord.Embed(title='DA RULES', 
-                                        description=f'Each player holds {CARDS} cards at a time each with a different prompt and the primary objective of the game is to use these prompts in conversation without getting caught (only works in https://discord.com/channels/1025958887209316422/1337502693903831061).\n\nIf you attempt to slip in a prompt and are not caught for 20 messages, then you will be granted +5 points. However, if you are caught before then, then you will lose -1 point.\n\nIf you suspect someone is trying to slip in one of their prompts, you may report them in order to gain +1 point. If you are wrong, however then you will lose -1 point.\n\nTo avoid spam, you may only slip in a card every {precisedelta(COOLDOWN)}. Additionally using multiple prompts in one message will only count one.\n\nAfter a period of time, a new deck with a different theme will be rotated in; at this time, whoever has the most points will win the game and a new game will be started. Good luck!\n\n**Points**\nSlipping in a card: +5\nGetting caught: -1\nCatching someone: +2\nFalse reporting: -1\n\n**Commands**\n`,join` - Join the game\n`,report` - Reply to a message with this command to report it\n`,cards` - View your cards\n`,cooldown` - Check your remaining cooldown\n`,leaderboard` - View the current points leaderboard\n\n*Reminder that commands work in bot DMs*\n\nCurrent Theme:\n**{THEME}**'))
+                                        description=f'Each player holds {CARDS} cards at a time each with a different prompt and the primary objective of the game is to use these prompts in conversation without getting caught (only works in https://discord.com/channels/1025958887209316422/1337502693903831061).\n\nIf you attempt to slip in a prompt and are not caught for 20 messages, then you will be granted +5 points. However, if you are caught before then, then you will lose -1 point.\n\nIf you suspect someone is trying to slip in one of their prompts, you may report them in order to gain +1 point. If you are wrong, however then you will lose -1 point.\n\nTo avoid spam, you may only slip in a card every {precisedelta(COOLDOWN)}. Additionally using multiple prompts in one message will only count one.\n\nAfter a period of time, a new deck with a different theme will be rotated in; at this time, whoever has the most points will win the game and a new game will be started. Good luck!\n\n**Points**\nSlipping in a card: +5\nGetting caught: -1\nCatching someone: +2\nFalse reporting: -1\n\n**Commands**\n`,join` - Join the game\n`,report` - Reply to a message with this command to report it\n`,cards` - View your cards\n`,cooldown` - Check your remaining cooldown\n`,swap` - Swap out half of your cards for new ones\n`,leaderboard` - View the current points leaderboard\n\n*Reminder that commands work in bot DMs*\n\nCurrent Theme:\n**{THEME}**'))
 
 
 # run bot
