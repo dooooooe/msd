@@ -482,10 +482,14 @@ async def change_theme(ctx, *, theme: str):
 async def give_points(ctx, user: discord.User, amount: float):
     if str(user.id) + '.txt' in os.listdir('./userdata'):
         give_points(user, amount)
+        await ctx.reply(f'Gave {user.name} {amount} points')
+
+    else:
+        await ctx.reply(f'{user.name} is not playing')
 
 
 @bot.command(name='gitfetch')
-@commands.is_owner()
+@dooe()
 async def update_bot(ctx):
     subprocess.Popen(['update.bat'], shell=True)
     await ctx.send('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
