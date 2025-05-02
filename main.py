@@ -4,6 +4,7 @@ import random
 import os
 import json
 import shutil
+import subprocess
 from dotenv import load_dotenv
 
 import discord
@@ -481,6 +482,14 @@ async def change_theme(ctx, *, theme: str):
 async def give_points(ctx, user: discord.User, amount: float):
     if str(user.id) + '.txt' in os.listdir('./userdata'):
         give_points(user, amount)
+
+
+@bot.command(name='gitfetch')
+@commands.is_owner()
+async def update_bot(ctx):
+    subprocess.Popen(['update.bat'], shell=True)
+    await ctx.send('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    await bot.close()
 
 
 # run bot
