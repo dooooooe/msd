@@ -124,6 +124,8 @@ async def on_message(message):
                     played_cards.remove(card)
 
             # play cards
+            card_played = False
+                    
             with open(user_file(userid), 'r') as f:
                 cards = f.readlines()
 
@@ -143,14 +145,15 @@ async def on_message(message):
 
                         await message.author.send(embed=discord.Embed(title='You played a card:', description=card))
                         await give_cards(message.author, 1)
-                        reset_cooldown(message.author)
+                        card_played = True
 
                         print(f'{message.author.name} played {card}')
 
                     else:
                         await message.author.send(f'You may play another card in {precisedelta(cooldown)}')
 
-                    break
+            if card_played:
+                reset_cooldown(message.author)
 
 
 @bot.event
@@ -494,6 +497,11 @@ async def update_bot(ctx):
     subprocess.Popen(['update.bat'], shell=True)
     await ctx.send('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
     await bot.close()
+
+
+@bot.command(name='test')
+async def test(ctx):
+    await ctx.reply('heyo')
 
 
 # run bot
