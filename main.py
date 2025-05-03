@@ -187,9 +187,9 @@ async def join(ctx):
     with open('./data/wins.json', 'r') as f:
         wins = json.load(f)
 
-    scoreboard[ctx.author.id] = 0
-    cooldowns[ctx.author.id] = 0
-    wins[ctx.author.id] = 0 if ctx.author.id not in wins else wins[ctx.author.id]
+    scoreboard[str(ctx.author.id)] = 0
+    cooldowns[str(ctx.author.id)] = 0
+    wins[str(ctx.author.id)] = 0 if str(ctx.author.id) not in wins else wins[str(ctx.author.id)]
 
     with open('./data/scoreboard.json', 'w') as f:
         json.dump(scoreboard, f, indent=4)
@@ -479,7 +479,7 @@ async def change_theme(ctx, *, theme: str):
 
 @bot.command(name='givepoints')
 @dooe()
-async def give_points(ctx, user: discord.User, amount: float):
+async def give_points_command(ctx, user: discord.User, amount: float):
     if str(user.id) + '.txt' in os.listdir('./userdata'):
         give_points(user, amount)
         await ctx.reply(f'Gave {user.name} {amount} points')
