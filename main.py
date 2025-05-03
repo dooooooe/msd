@@ -3,6 +3,7 @@ from humanize import precisedelta
 import random
 import os
 import json
+import asyncio
 import shutil
 import subprocess
 from dotenv import load_dotenv
@@ -15,14 +16,18 @@ bot = commands.Bot(command_prefix=',', intents=discord.Intents.all(), help_comma
 async def on_ready():
     print('hiii :3')
 
-# game setup
+    if f'{DECK}.txt' in os.listdir('./decks'):
+        shutil.copyfile(f'./decks/{DECK}.txt', './decks/deck.txt')
+    else:
+        user = await bot.fetch_user(326435590666977280)
+        await user.send(f'hi, {DECK}.txt does not exist')
+
+
 COUNTDOWN = 20
 DECK = 'league'
 THEME = 'League of Legends'
 COOLDOWN = 600
 CARDS = 10
-
-shutil.copyfile(f'./decks/{DECK}.txt', './decks/deck.txt')
 
 # bot functions
 played_cards = []
