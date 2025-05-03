@@ -495,8 +495,13 @@ async def give_points(ctx, user: discord.User, amount: float):
 @dooe()
 async def update_bot(ctx):
     subprocess.Popen(['update.bat'], shell=True)
-    await ctx.send('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    await ctx.send('Restarting bot...')
     await bot.close()
+
+
+@bot.command(name='test')
+async def test(ctx):
+    await ctx.reply('heyo')
 
 
 # run bot
