@@ -81,7 +81,8 @@ def give_points(user, amount):
     with open('./data/scoreboard.json', 'r') as f:
         scoreboard = json.load(f)
 
-    scoreboard[str(user.id)] += amount
+    asdf = scoreboard[str(user.id)]
+    scoreboard[str(user.id)] = int(asdf + amount)
 
     with open('./data/scoreboard.json', 'w') as f:
         json.dump(scoreboard, f, indent=4)
@@ -483,7 +484,7 @@ async def change_theme(ctx, *, theme: str):
 
 @bot.command(name='givepoints')
 @dooe()
-async def give_points_command(ctx, user: discord.User, amount: float):
+async def give_points_command(ctx, user: discord.User, amount: int):
     if str(user.id) + '.txt' in os.listdir('./userdata'):
         give_points(user, amount)
         await ctx.reply(f'Gave {user.name} {amount} points')
