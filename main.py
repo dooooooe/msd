@@ -499,11 +499,6 @@ async def update_bot(ctx):
     await bot.close()
 
 
-@bot.command(name='test')
-async def test(ctx):
-    await ctx.reply('heyo')
-
-
 # run bot
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
