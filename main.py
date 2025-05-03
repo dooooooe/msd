@@ -24,9 +24,6 @@ CARDS = 10
 
 shutil.copyfile(f'./decks/{DECK}.txt', './decks/deck.txt')
 
-with open('./data/scoreboard.json', 'w') as f:
-    f.write('{}')
-
 # bot functions
 played_cards = []
 
