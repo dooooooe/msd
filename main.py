@@ -81,8 +81,7 @@ def give_points(user, amount):
     with open('./data/scoreboard.json', 'r') as f:
         scoreboard = json.load(f)
 
-    asdf = scoreboard[str(user.id)]
-    scoreboard[str(user.id)] = int(asdf + amount)
+    scoreboard[str(user.id)] += amount
 
     with open('./data/scoreboard.json', 'w') as f:
         json.dump(scoreboard, f, indent=4)
