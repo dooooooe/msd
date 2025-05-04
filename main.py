@@ -222,6 +222,7 @@ async def report(ctx):
         return
 
     if ctx.message.reference:
+        reported = False
         for card in played_cards:
             if card.message.id == ctx.message.reference.message_id:
                 if card.message.author == ctx.message.author:
@@ -232,9 +233,11 @@ async def report(ctx):
                 give_points(ctx.author, 2)  
                 give_points(card.message.author, -1)
                 played_cards.remove(card)
+                reported = True
 
-        await ctx.reply(f'{ctx.author.name} is schizo! (-1)')
-        give_points(ctx.author, -1)
+        if reported:
+            await ctx.reply(f'{ctx.author.name} is schizo! (-1)')
+            give_points(ctx.author, -1)
 
     else:
         await ctx.reply('nice report retard')
