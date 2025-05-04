@@ -24,9 +24,9 @@ async def on_ready():
 
 
 COUNTDOWN = 20
-DECK = 'league'
-THEME = 'League of Legends'
-COOLDOWN = 600
+DECK = 'brainrot'
+THEME = 'skibiti toelet'
+COOLDOWN = 300
 CARDS = 10
 
 # bot functions
