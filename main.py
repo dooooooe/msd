@@ -180,7 +180,7 @@ async def on_message_edit(before, after):
 @bot.command(name='join')
 async def join(ctx):
     if str(ctx.author.id) + '.txt' in os.listdir('./userdata'):
-        await ctx.reply(':rage:')
+        await ctx.reply('You are already participating in the game!')
         return
 
     with open('./data/scoreboard.json', 'r') as f:
@@ -219,6 +219,7 @@ async def leave(ctx):
 @bot.command(name='report', aliases=['r', 're', 'rep'])
 async def report(ctx):
     if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
+        await ctx.reply('Use ,join to play')
         return
 
     if ctx.message.reference:
@@ -271,6 +272,7 @@ async def word_salad(ctx, defendant: discord.User=None):
 @bot.command(name='cards', aliases=['viewcards'])
 async def cards(ctx):
     if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
+        await ctx.reply('Use ,join to play')
         return
     
     with open(user_file(ctx.author.id), 'r') as f:
@@ -341,6 +343,7 @@ async def wins(ctx):
 @bot.command(name='cooldown', aliases=['cd'])
 async def cooldown(ctx):
     if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
+        await ctx.reply('Use ,join to play')
         return
     
     cooldown = COOLDOWN - (int(time.time()) - get_cooldown(ctx.author))
@@ -355,6 +358,7 @@ async def cooldown(ctx):
 @bot.command(name='cycle', aliases=['swap', 'reroll', 'rotate', 'draw'])
 async def cycle(ctx):
     if str(ctx.author.id) + '.txt' not in os.listdir('./userdata'):
+        await ctx.reply('Use ,join to play')
         return
 
     cooldown = COOLDOWN - (int(time.time()) - get_cooldown(ctx.author))
