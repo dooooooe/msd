@@ -235,7 +235,7 @@ async def report(ctx):
                 played_cards.remove(card)
                 reported = True
 
-        if reported:
+        if not reported:
             await ctx.reply(f'{ctx.author.name} is schizo! (-1)')
             give_points(ctx.author, -1)
 
