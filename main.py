@@ -139,7 +139,7 @@ async def on_message(message):
 
                     if cooldown <= 0:
                         if 'https://' in message.content:
-                            await message.reply(f'{message.author.name} TRIED TO USE \'{card}\' IN A LINK XD (-5)')
+                            await message.reply(f'{message.author.name} TRIED TO USE \'{card.strip()}\' IN A LINK XD (-5)')
                             await give_points(message.author, -5)
                             return
 
