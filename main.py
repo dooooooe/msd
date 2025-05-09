@@ -3,7 +3,6 @@ from humanize import precisedelta
 import random
 import os
 import json
-import asyncio
 import shutil
 import subprocess
 from dotenv import load_dotenv
@@ -139,6 +138,11 @@ async def on_message(message):
                     cooldown = COOLDOWN - (int(time.time()) - get_cooldown(message.author))
 
                     if cooldown <= 0:
+                        if 'https://' in message.content:
+                            await message.reply(f'{message.author.name} TRIED TO USE \'{card}\' IN A LINK XD (-5)')
+                            await give_points(message.author, -5)
+                            return
+
                         played_cards.append(Card(card, message))
                         cards.remove(card)
 
@@ -392,7 +396,7 @@ async def help(ctx):
         return
     
     await ctx.reply(embed=discord.Embed(title='DA RULES', 
-                                        description=f'Each player holds {CARDS} cards at a time each with a different prompt and the primary objective of the game is to use these prompts in conversation without getting caught (only works in https://discord.com/channels/1025958887209316422/1337502693903831061).\n\nIf you attempt to slip in a prompt and are not caught for 20 messages, then you will be granted +5 points. However, if you are caught before then, then you will lose -1 point.\n\nIf you suspect someone is trying to slip in one of their prompts, you may report them in order to gain +2 points. If you are wrong, however then you will lose -1 point.\n\nTo avoid spam, you may only slip in a card every {precisedelta(COOLDOWN)}. However, you may bypass this cooldown by playing mutliple cards in one message.\n\nAfter a period of time, a new deck with a different theme will be rotated in; at this time, whoever has the most points will win the game and a new game will be started. Good luck!\n\n**Points**\nSlipping in a card: +5\nGetting caught: -1\nCatching someone: +2\nFalse reporting: -1\n\n**Commands**\n`,join` - Join the game\n`,report` - Reply to a message with this command to report it\n`,cards` - View your cards\n`,deck` - Be sent a copy of the deck in play\n`,cooldown` - Check your remaining cooldown\n`,swap` - Swap out half of your cards for new ones\n`,leaderboard` - View the current points leaderboard\n`,wins` - View the all time wins leaderboard\n\n*Reminder that commands work in bot DMs*\n\nCurrent Theme:\n**{THEME}**'))
+                                        description=f'Each player holds {CARDS} cards at a time each with a different prompt and the primary objective of the game is to use these prompts in conversation without getting caught (only works in https://discord.com/channels/1025958887209316422/1337502693903831061).\n\nIf you attempt to slip in a prompt and are not caught for 20 messages, then you will be granted +5 points. However, if you are caught before then, then you will lose -1 point.\n\nIf you suspect someone is trying to slip in one of their prompts, you may report them in order to gain +2 points. If you are wrong, however then you will lose -1 point.\n\nTo avoid spam, you may only slip in a card every {precisedelta(COOLDOWN)}. However, you may bypass this cooldown by playing mutliple cards in one message.\n\nAfter a period of time, a new deck with a different theme will be rotated in; at this time, whoever has the most points will win the game and a new game will be started. Good luck!\n\n**Points**\nSlipping in a card: +5\nGetting caught: -1\nCatching someone: +2\nFalse reporting: -1\nTrying to send a card in a link: -5\n\n**Commands**\n`,join` - Join the game\n`,report` - Reply to a message with this command to report it\n`,cards` - View your cards\n`,deck` - Be sent a copy of the deck in play\n`,cooldown` - Check your remaining cooldown\n`,swap` - Swap out half of your cards for new ones\n`,leaderboard` - View the current points leaderboard\n`,wins` - View the all time wins leaderboard\n\n*Reminder that commands work in bot DMs*\n\nCurrent Theme:\n**{THEME}**'))
 
 
 # admin commands
